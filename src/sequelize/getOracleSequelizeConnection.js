@@ -3,7 +3,11 @@ import { Sequelize } from 'sequelize'
 import { isEmpty } from '../util/index.js'
 import Logger from '../util/logger.js'
 
-OracleDB.initOracleClient()
+let clientOpts = {};
+
+clientOpts = { libDir: `${process.env.PATH_ORACLE_INSTANT_CLIENT}` };
+
+OracleDB.initOracleClient(clientOpts)
 
 export const getOracleSequelizeConnection = async ({ logger = Logger } = {}) => {
   const fName = '[getOracleSequelizeConnection]'
