@@ -1,19 +1,10 @@
 import { getOracleSequelizeConnection } from '../../sequelize/getOracleSequelizeConnection.js'
-import tDatosbasicosEstadosNiifService from '../../sequelize/services/tDatosbasicosEstadosNiif-service.js'
-import {isEmpty} from '../../util/index.js'
+import tCuentasNiifService from '../../sequelize/services/tCuentasNiif-service.js'
 import Logger from '../../util/logger.js'
 
-
 export default async (req, res) => {
-    const fName = '[datos-estados]'
+    const fName = '[cuentas-niif]'
     const logger = Logger
-
-    const {esalId} = req.params
-    
-    if (isEmpty(esalId)) {
-        logger.error(`[${fName}] No ESAL ID provided`)
-        return res.status(400).json({ error: 'No ESAL ID provided' })
-    }
 
     const resultOracleCredentials = await getOracleSequelizeConnection({ logger })
     if (!resultOracleCredentials?.success) {
@@ -26,15 +17,8 @@ export default async (req, res) => {
         const {config: sequelizeConfig} = resultOracleCredentials ?? {}
 
         // Obiene informacion de la base de datos
-        const tDatosbasicosEstadosNiifServiceInstance = new tDatosbasicosEstadosNiifService(sequelizeConfig)
-        
-        // Define aquí los campos que quieres mostrar
-        const attributes = ['daenId', 'esalId', 'daenAno', 'daenNomreplegal','daenEstado', 'daenFechareg']
-        
-        const result = await tDatosbasicosEstadosNiifServiceInstance.findDatosBasicosEstadosNIIF({
-            esalId, 
-            attributes
-        })
+        const tCuentasNiifServiceInstance = new tCuentasNiifService(sequelizeConfig)
+        const result = await tCuentasNiifServiceInstance.findCuentasNiif({where: {}})
         if (!result?.success) {
             const error = `Error al obtener los datos basicos de estados niif`
             logger.error(`${fName} ${error}`)

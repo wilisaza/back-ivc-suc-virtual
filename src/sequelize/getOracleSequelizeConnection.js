@@ -29,11 +29,11 @@ export const getOracleSequelizeConnection = async ({ logger = Logger } = {}) => 
     dialect: 'oracle',
     dialectOptions: {
       connectString: connectString,
-      maxRows: 100,
+      maxRows: 100000,
       fetchAsString: [OracleDB.NUMBER],
     },
     retry: {
-      max: 5, // Retry failed queries up to 5 times
+      max: 5,
     },
     logging: false,
   })
